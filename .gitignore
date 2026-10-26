@@ -1,0 +1,12 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+runs/
+*.pt
+*.onnx
+!intel_v1_export/best.onnx
+weights/*
+!weights/README.md
+uploads/
+.commandcode/

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}SCENE//CLASSIFIER{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-state="{{ model_state }}">
+  <div class="grid-overlay" aria-hidden="true"></div>
+  <div class="spine" aria-hidden="true">
+    <span class="spine__coord">N41.0082</span>
+    <span class="spine__coord">E028.9784</span>
+  </div>
+
+  <header class="site-head">
+    <div class="site-head__inner">
+      <a href="/" class="site-head__brand">
+        <span class="brand-mark"></span>
+        SCENE<span class="brand-slash">//</span>CLASSIFIER
+      </a>
+      <div class="site-head__meta mono">
+        <span>SYS.01 // VISION</span>
+        <span>YOLOV8N-CLS</span>
+        <span class="head-dot" data-state-dot="{{ model_state }}"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-foot mono">
+    <div class="site-foot__inner">
+      <span>&copy; 2026 — ENGINEER'S PERSONAL SYSTEM</span>
+      <span>DOC.REV 001 / SCALE 1:1</span>
+      <span>{% if weights_file %}WTS: {{ weights_file }}{% else %}WTS: —{% endif %}</span>
+    </div>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

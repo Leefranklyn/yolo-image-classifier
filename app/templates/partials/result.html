@@ -1,0 +1,53 @@
+{% if error == "offline" %}
+<div class="result result--offline">
+  <div class="result__off-head">
+    <span class="mono result__off-tag">SYS.FAULT</span>
+  </div>
+  <h2 class="result__off-title">MODEL OFFLINE<span class="mono result__off-dot">.</span></h2>
+  <p class="result__off-copy">
+    No weights mounted at <span class="mono">weights/</span>.<br>
+    Export <span class="mono">best.pt</span> from Kaggle output, place it in
+    <span class="mono">weights/best.pt</span>, restart the service.
+  </p>
+  <p class="mono result__off-meta">E-04 // WEIGHTS NOT MOUNTED</p>
+</div>
+{% elif prediction %}
+<div class="result">
+  <div class="result__topline mono">
+    <span>RES.TOP1 <span class="accent-tag">[ACTIVE]</span></span>
+    <span>MODEL {{ prediction.model_id }}</span>
+  </div>
+  <div class="result__stage">
+    <div class="result__headline">
+      <p class="mono result__index">SEC.03.A // VERDICT</p>
+      <h2 class="result__class">{{ prediction.top_class }}</h2>
+      <p class="mono result__conf">{{ '%.4f' % prediction.confidence }} CONFIDENCE</p>
+    </div>
+    <table class="result__table">
+      <thead>
+        <tr class="mono">
+          <th>IDX</th><th>CLASS</th><th class="table-bar-head">DISTRIBUTION</th><th>P</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cp in prediction.prob_table %}
+        <tr class="{{ 'is-top' if loop.first else 'row' }}">
+          <td class="mono table-idx">{{ '%02d' % loop.index }}</td>
+          <td class="table-name">{{ cp.name }}</td>
+          <td class="table-bar">
+            <span class="table-bar__fill" style="--w: {{ '%.1f' % (cp.prob * 100) }}%"
+                  data-bar></span>
+          </td>
+          <td class="mono table-p">{{ '%.4f' % cp.prob }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="result__footer mono">
+    <span>SRC {{ prediction.width }}&times;{{ prediction.height }}</span>
+    <span>INFER {{ prediction.elapsed_ms }}MS</span>
+    <span>CPU.N {{ prediction.model_id }}</span>
+  </div>
+</div>
+{% endif %}

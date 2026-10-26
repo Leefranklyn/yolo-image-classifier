@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="intake">
+  <div class="intake__left">
+    <p class="mono section-label">SEC.01 // INTAKE</p>
+
+    <div class="status-block">
+      <p class="mono status-block__label">SYSTEM STATUS</p>
+      {% if model_state == "ready" %}
+      <p class="status-block__value">MODEL <span class="accent-tag">[ACTIVE]</span></p>
+      {% else %}
+      <p class="status-block__value status-block__value--dim">MODEL <span class="dim-tag">[OFFLINE]</span></p>
+      {% endif %}
+      <dl class="mono status-block__meta">
+        <div><dt>WEIGHTS</dt><dd>{{ weights_file or "NOT MOUNTED" }}</dd></div>
+        <div><dt>INPUT</dt><dd>224 &times; 224</dd></div>
+        <div><dt>TAXONOMY</dt><dd>6 CLASSES</dd></div>
+      </dl>
+    </div>
+
+    <div class="upload" id="upload-zone" data-offline="{{ 'true' if model_state != 'ready' else 'false' }}">
+      <div class="upload__frame">
+        <p class="mono upload__hint">DROP IMAGE<br>OR CLICK TO SELECT</p>
+        <p class="mono upload__limit">JPG / PNG / WEBP &mdash; 10.0MB</p>
+      </div>
+      <button class="upload__submit mono" id="analyze-btn" type="button" disabled>
+        ANALYZE<span class="upload__corner">&#9497;</span>
+      </button>
+      <input type="file" id="file-input" accept="image/*" hidden>
+      <div class="upload__preview" id="preview" hidden>
+        <img id="preview-img" alt="">
+        <p class="mono upload__file-meta" id="preview-meta"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="intake__right">
+    <h1 class="display">
+      SCENE<br>
+      <span class="display__outline">CLASSIFIER.</span>
+    </h1>
+    <p class="mono display__serial">DOC.001 &mdash; INTEL SCENE / 6 CLASS / 17,034 SAMPLES / IMG 224</p>
+
+    <div class="manifest">
+      <p class="mono section-label">SEC.02 // CLASS MANIFEST</p>
+      <ol class="manifest__list">
+        {% for c in classes %}
+        <li class="manifest__row">
+          <span class="mono manifest__num">{{ '%02d' % (loop.index) }}</span>
+          <span class="manifest__name">{{ c }}</span>
+          <span class="manifest__rule" aria-hidden="true"></span>
+          <span class="mono manifest__score" data-class-score="{{ c }}">&mdash;</span>
+        </li>
+        {% endfor %}
+      </ol>
+      <p class="mono manifest__note">TOP-1 RESOLVES TO LIME. ALL SIX CLASSES REPORTED PER RUN.</p>
+    </div>
+  </div>
+</section>
+
+<section class="result-region" id="result-region" aria-live="polite">
+  <p class="mono section-label">SEC.03 // ANALYSIS OUTPUT</p>
+  <div id="result-slot">
+    <p class="mono result-empty">AWAITING IMAGE STREAM &mdash; NO DATA IN PIPELINE</p>
+  </div>
+</section>
+{% endblock %}
